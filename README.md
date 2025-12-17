@@ -2,6 +2,34 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Environment Setup
+
+Copy the example environment file and fill in your credentials:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Required environment variables:
+- `NEXT_PUBLIC_SUPABASE_URL` - Your Supabase project URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Your Supabase anonymous key
+- `SUPABASE_SERVICE_ROLE_KEY` - Your Supabase service role key
+- `GOOGLE_GENERATIVE_AI_API_KEY` - Your Google AI API key
+- `ADMIN_EMAIL` - Email for the admin account
+- `ADMIN_PASSWORD` - Password for the admin account
+
+### Seed Admin User
+
+Before running the application, seed the admin user:
+
+```bash
+npm run seed:admin
+```
+
+This creates an admin account with the credentials specified in your environment variables. Admin accounts have access to document management features.
+
+### Run Development Server
+
 First, run the development server:
 
 ```bash
