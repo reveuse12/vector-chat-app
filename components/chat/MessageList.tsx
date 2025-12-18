@@ -46,8 +46,8 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
   }
 
   return (
-    <ScrollArea className="flex-1 p-4" ref={scrollRef}>
-      <div className="max-w-4xl mx-auto space-y-4">
+    <ScrollArea className="flex-1 p-2 sm:p-4" ref={scrollRef}>
+      <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 pt-10 md:pt-0">
         {messages.map((message) => (
           <MessageBubble key={message.id} message={message} />
         ))}
@@ -84,11 +84,11 @@ function MessageBubble({ message }: { message: Message }) {
   return (
     <div
       className={cn(
-        'flex gap-3 items-start',
+        'flex gap-2 sm:gap-3 items-start',
         isUser && 'flex-row-reverse'
       )}
     >
-      <Avatar className="h-8 w-8 shrink-0">
+      <Avatar className="h-7 w-7 sm:h-8 sm:w-8 shrink-0">
         <AvatarFallback
           className={cn(
             isUser
@@ -96,18 +96,18 @@ function MessageBubble({ message }: { message: Message }) {
               : 'bg-primary text-primary-foreground'
           )}
         >
-          {isUser ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+          {isUser ? <User className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> : <Bot className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
         </AvatarFallback>
       </Avatar>
       
       <Card
         className={cn(
-          'max-w-[80%] py-3',
+          'max-w-[85%] sm:max-w-[80%] py-2 sm:py-3',
           isUser && 'bg-secondary'
         )}
       >
-        <CardContent className="p-0 px-4">
-          <div className="whitespace-pre-wrap text-sm">
+        <CardContent className="p-0 px-3 sm:px-4">
+          <div className="whitespace-pre-wrap text-sm break-words">
             {message.content}
           </div>
         </CardContent>

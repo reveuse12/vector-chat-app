@@ -47,7 +47,7 @@ export function ChatInput({ onSubmit, isLoading }: ChatInputProps) {
   };
 
   return (
-    <div className="border-t bg-background p-4">
+    <div className="border-t bg-background p-2 sm:p-4">
       <div className="flex gap-2 max-w-4xl mx-auto">
         <Textarea
           ref={textareaRef}
@@ -56,14 +56,14 @@ export function ChatInput({ onSubmit, isLoading }: ChatInputProps) {
           onKeyDown={handleKeyDown}
           placeholder="Type your message..."
           disabled={isLoading}
-          className="min-h-[60px] max-h-[200px] resize-none"
+          className="min-h-[48px] sm:min-h-[60px] max-h-[200px] resize-none text-base"
           rows={1}
         />
         <Button
           onClick={handleSubmit}
           disabled={!input.trim() || isLoading}
           size="icon"
-          className="h-[60px] w-[60px] shrink-0"
+          className="h-[48px] w-[48px] sm:h-[60px] sm:w-[60px] shrink-0"
         >
           <Send className="h-5 w-5" />
           <span className="sr-only">Send message</span>

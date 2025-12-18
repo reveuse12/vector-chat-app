@@ -4,7 +4,7 @@
  * Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 6.1, 6.2, 6.4
  */
 
-import { google } from '@ai-sdk/google';
+import { xai } from '@ai-sdk/xai';
 import { streamText } from 'ai';
 import { createServerClient } from '@/lib/supabase/server';
 import { retrieveContext, buildAugmentedPrompt, DEFAULT_SYSTEM_PROMPT, NO_CONTEXT_SYSTEM_PROMPT, RetrievedContext } from '@/lib/services/rag';
@@ -92,22 +92,22 @@ export async function POST(request: Request) {
 
     // Retrieve relevant context from knowledge base
     let context: RetrievedContext[] = [];
+    let systemPrompt = NO_CONTEXT_SYSTEM_PROMPT;
+    
     try {
       context = await retrieveContext(lastUserMessage.content, MAX_CONTEXT_CHUNKS);
+      // Build augmented system prompt with context
+      const basePrompt = context.length > 0 ? DEFAULT_SYSTEM_PROMPT : NO_CONTEXT_SYSTEM_PROMPT;
+      systemPrompt = buildAugmentedPrompt(basePrompt, context);
     } catch (ragError) {
-      console.error('Error retrieving context:', ragError);
-      // Continue without context if RAG fails
-      context = [];
+      console.error('Error retrieving context (continuing without RAG):', ragError);
+      // Continue without context if RAG fails - use simple prompt
+      systemPrompt = 'You are a helpful AI assistant. Answer the user\'s questions helpfully and concisely.';
     }
 
-    // Build augmented system prompt with context
-    // Use NO_CONTEXT_SYSTEM_PROMPT when knowledge base is empty or no relevant context found
-    const basePrompt = context.length > 0 ? DEFAULT_SYSTEM_PROMPT : NO_CONTEXT_SYSTEM_PROMPT;
-    const systemPrompt = buildAugmentedPrompt(basePrompt, context);
-
-    // Stream response from Gemini using Vercel AI SDK
+    // Stream response from Grok using Vercel AI SDK
     const result = streamText({
-      model: google('gemini-1.5-flash'),
+      model: xai('grok-3-mini'),
       system: systemPrompt,
       messages: messages.map((m: { role: string; content: string }) => ({
         role: m.role as 'user' | 'assistant',

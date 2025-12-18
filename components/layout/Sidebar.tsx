@@ -18,6 +18,8 @@ interface SidebarProps {
   onNewChat: () => void;
   onSelectChat: (chatId: string) => void;
   isLoading?: boolean;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 export function Sidebar({
@@ -26,9 +28,17 @@ export function Sidebar({
   onNewChat,
   onSelectChat,
   isLoading = false,
+  isOpen = false,
 }: SidebarProps) {
   return (
-    <aside className="w-64 border-r bg-muted/30 flex flex-col h-full">
+    <aside
+      className={cn(
+        'w-64 border-r bg-muted/30 flex flex-col h-full transition-transform duration-200 ease-in-out',
+        'fixed md:relative z-40 md:z-auto',
+        'md:translate-x-0',
+        isOpen ? 'translate-x-0' : '-translate-x-full'
+      )}
+    >
       {/* Header with New Chat button */}
       <div className="p-4 border-b">
         <Button

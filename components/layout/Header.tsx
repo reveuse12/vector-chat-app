@@ -48,11 +48,11 @@ export function Header({ userEmail, isAdmin }: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
+      <div className="container flex h-14 items-center px-4">
         {/* Logo / Brand */}
-        <Link href="/chat" className="flex items-center space-x-2 mr-6">
-          <FileText className="h-6 w-6 text-primary" />
-          <span className="font-semibold text-lg">RAG Chat</span>
+        <Link href="/chat" className="flex items-center space-x-2 mr-4 sm:mr-6">
+          <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+          <span className="font-semibold text-base sm:text-lg hidden xs:inline">RAG Chat</span>
         </Link>
 
         {/* Navigation */}
@@ -65,10 +65,10 @@ export function Header({ userEmail, isAdmin }: HeaderProps) {
                 <Button
                   variant={isActive ? 'secondary' : 'ghost'}
                   size="sm"
-                  className="gap-2"
+                  className="gap-1 sm:gap-2 px-2 sm:px-3"
                 >
                   <Icon className="h-4 w-4" />
-                  {item.label}
+                  <span className="hidden sm:inline">{item.label}</span>
                 </Button>
               </Link>
             );

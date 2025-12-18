@@ -9,12 +9,15 @@
 import { useState, useEffect } from 'react';
 import { ChatInterface } from '@/components/chat/ChatInterface';
 import { Sidebar } from '@/components/layout/Sidebar';
+import { Button } from '@/components/ui/button';
+import { Menu, X } from 'lucide-react';
 import type { ChatWithMessages } from '@/lib/types/database';
 
 export default function ChatPage() {
   const [chats, setChats] = useState<ChatWithMessages[]>([]);
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Load chat history on mount
   useEffect(() => {
@@ -42,11 +45,13 @@ export default function ChatPage() {
   // Handle new chat creation
   const handleNewChat = () => {
     setCurrentChatId(null);
+    setIsSidebarOpen(false);
   };
 
   // Handle chat selection
   const handleSelectChat = (chatId: string) => {
     setCurrentChatId(chatId);
+    setIsSidebarOpen(false);
   };
 
   // Handle chat ID update from ChatInterface (when new chat is created)
@@ -60,7 +65,25 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-[calc(100vh-3.5rem)] relative">
+      {/* Mobile sidebar toggle */}
+      <Button
+        variant="ghost"
+        size="icon"
+        className="absolute top-2 left-2 z-50 md:hidden"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      >
+        {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+      </Button>
+
+      {/* Mobile overlay */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar for chat history */}
       <Sidebar
         chats={chats}
@@ -68,10 +91,12 @@ export default function ChatPage() {
         onNewChat={handleNewChat}
         onSelectChat={handleSelectChat}
         isLoading={isLoadingHistory}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
       />
 
       {/* Main chat area */}
-      <main className="flex-1 flex flex-col">
+      <main className="flex-1 flex flex-col min-w-0">
         <ChatInterface
           chatId={currentChatId}
           initialMessages={initialMessages}

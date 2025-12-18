@@ -187,13 +187,25 @@ export function ChatInterface({
   const isLoading = status === 'streaming' || status === 'submitted';
 
   // Convert messages to the format expected by MessageList
-  const displayMessages = messages.map((msg) => ({
-    id: msg.id,
-    role: msg.role as 'user' | 'assistant' | 'system',
-    content: msg.parts
-      ?.map((p) => ('text' in p ? p.text : ''))
-      .join('') || '',
-  }));
+  const displayMessages = messages.map((msg) => {
+    // Handle both old format (content string) and new format (parts array)
+    let content = '';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const msgAny = msg as any;
+    if (typeof msgAny.content === 'string') {
+      content = msgAny.content;
+    } else if (msg.parts && Array.isArray(msg.parts)) {
+      content = msg.parts
+        .map((p) => ('text' in p ? p.text : ''))
+        .join('');
+    }
+    
+    return {
+      id: msg.id,
+      role: msg.role as 'user' | 'assistant' | 'system',
+      content,
+    };
+  });
 
   return (
     <div className="flex flex-col h-full">
