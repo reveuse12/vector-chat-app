@@ -8,7 +8,7 @@ interface EnvConfig {
   NEXT_PUBLIC_SUPABASE_URL: string;
   NEXT_PUBLIC_SUPABASE_ANON_KEY: string;
   // Supabase (server-only)
-  SUPABASE_SERVICE_ROLE_KEY: string;
+  SUPABASE_SERVICE_ROLE_KEY?: string;
   // Google AI (server-only)
   GOOGLE_GENERATIVE_AI_API_KEY: string;
 }
@@ -16,7 +16,6 @@ interface EnvConfig {
 const requiredEnvVars = [
   'NEXT_PUBLIC_SUPABASE_URL',
   'NEXT_PUBLIC_SUPABASE_ANON_KEY',
-  'SUPABASE_SERVICE_ROLE_KEY',
   'GOOGLE_GENERATIVE_AI_API_KEY',
 ] as const;
 
@@ -42,7 +41,7 @@ export function validateEnv(): EnvConfig {
   return {
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL!,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
     GOOGLE_GENERATIVE_AI_API_KEY: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
   };
 }
@@ -51,9 +50,9 @@ export function validateEnv(): EnvConfig {
  * Get a specific environment variable with validation
  * @throws Error if the variable is missing
  */
-export function getEnvVar(name: keyof EnvConfig): string {
+export function getEnvVar(name: keyof EnvConfig): string | undefined {
   const value = process.env[name];
-  if (!value) {
+  if (!value && name !== 'SUPABASE_SERVICE_ROLE_KEY') {
     throw new Error(`Missing required environment variable: ${name}`);
   }
   return value;
