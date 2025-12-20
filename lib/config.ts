@@ -47,19 +47,26 @@ export function validateEnv(): EnvConfig {
 }
 
 /**
- * Get a specific environment variable with validation
+ * Get a required environment variable with validation
  * @throws Error if the variable is missing
  */
-export function getEnvVar(name: keyof EnvConfig): string | undefined {
+export function getRequiredEnvVar(name: string): string {
   const value = process.env[name];
-  if (!value && name !== 'SUPABASE_SERVICE_ROLE_KEY') {
+  if (!value) {
     throw new Error(`Missing required environment variable: ${name}`);
   }
   return value;
 }
 
+/**
+ * Get an optional environment variable
+ */
+export function getOptionalEnvVar(name: string): string | undefined {
+  return process.env[name];
+}
+
 // Export individual getters for convenience
-export const getSupabaseUrl = () => getEnvVar('NEXT_PUBLIC_SUPABASE_URL');
-export const getSupabaseAnonKey = () => getEnvVar('NEXT_PUBLIC_SUPABASE_ANON_KEY');
-export const getSupabaseServiceRoleKey = () => getEnvVar('SUPABASE_SERVICE_ROLE_KEY');
-export const getGoogleAIKey = () => getEnvVar('GOOGLE_GENERATIVE_AI_API_KEY');
+export const getSupabaseUrl = (): string => getRequiredEnvVar('NEXT_PUBLIC_SUPABASE_URL');
+export const getSupabaseAnonKey = (): string => getRequiredEnvVar('NEXT_PUBLIC_SUPABASE_ANON_KEY');
+export const getSupabaseServiceRoleKey = (): string | undefined => getOptionalEnvVar('SUPABASE_SERVICE_ROLE_KEY');
+export const getGoogleAIKey = (): string => getRequiredEnvVar('GOOGLE_GENERATIVE_AI_API_KEY');
