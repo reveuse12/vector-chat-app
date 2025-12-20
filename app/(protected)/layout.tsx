@@ -22,12 +22,12 @@ export default async function ProtectedLayout({
   }
 
   // Get user profile for role information
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: profile } = await (supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .from('profiles') as any)
     .select('role')
     .eq('id', user.id)
-    .single() as { data: { role: string } | null };
+    .single();
 
   const isAdmin = profile?.role === 'admin';
 

@@ -38,10 +38,6 @@ export default function ChatPage() {
     loadChatHistory();
   }, []);
 
-  // Get current chat's messages
-  const currentChat = chats.find(chat => chat.id === currentChatId);
-  const initialMessages = currentChat?.messages || [];
-
   // Handle new chat creation
   const handleNewChat = () => {
     setCurrentChatId(null);
@@ -99,7 +95,6 @@ export default function ChatPage() {
       <main className="flex-1 flex flex-col min-w-0">
         <ChatInterface
           chatId={currentChatId}
-          initialMessages={initialMessages}
           onChatIdUpdate={handleChatIdUpdate}
         />
       </main>

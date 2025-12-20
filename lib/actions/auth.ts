@@ -47,6 +47,7 @@ export async function signUp(email: string, password: string): Promise<AuthResul
   // Create profile with role='user' (never admin via signup)
   // Requirements: 3.5 - signup creates accounts with 'user' role only
   const { error: profileError } = await (supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .from('profiles') as any)
     .insert({
       id: authData.user.id,

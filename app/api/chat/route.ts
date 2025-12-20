@@ -54,15 +54,15 @@ export async function POST(request: Request) {
     let currentChatId = chatId;
     if (!currentChatId) {
       // Create new chat session
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: chat, error: chatError } = await (supabase
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .from('chats') as any)
         .insert({
           user_id: user.id,
           title: lastUserMessage.content.substring(0, 100),
         })
         .select()
-        .single() as { data: { id: string } | null; error: Error | null };
+        .single();
 
       if (chatError || !chat) {
         console.error('Error creating chat:', chatError);
@@ -76,8 +76,8 @@ export async function POST(request: Request) {
     }
 
     // Persist user message before AI response
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { error: userMsgError } = await (supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .from('messages') as any)
       .insert({
         chat_id: currentChatId,
@@ -115,8 +115,8 @@ export async function POST(request: Request) {
       })),
       onFinish: async ({ text }) => {
         // Persist AI response after streaming completes
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const { error: assistantMsgError } = await (supabase
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .from('messages') as any)
           .insert({
             chat_id: currentChatId,
@@ -129,8 +129,8 @@ export async function POST(request: Request) {
         }
 
         // Update chat's updated_at timestamp
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (supabase
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .from('chats') as any)
           .update({ updated_at: new Date().toISOString() })
           .eq('id', currentChatId);

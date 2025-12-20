@@ -7,9 +7,6 @@ const protectedRoutes = ['/chat', '/admin'];
 // Routes that require admin role
 const adminRoutes = ['/admin'];
 
-// Routes that are public (no auth required)
-const publicRoutes = ['/login', '/'];
-
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 

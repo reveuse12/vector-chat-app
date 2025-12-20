@@ -131,8 +131,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<IngestRes
     }));
 
     // Insert all chunks into the documents table
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { error: insertError } = await (adminClient
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .from('documents') as any)
       .insert(documents);
 

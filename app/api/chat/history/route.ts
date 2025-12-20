@@ -31,12 +31,12 @@ export async function GET(): Promise<NextResponse<ChatHistoryResponse>> {
     }
 
     // Fetch all chats for the user, ordered by most recent first
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: chats, error: chatsError } = await (supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .from('chats') as any)
       .select('*')
       .eq('user_id', user.id)
-      .order('updated_at', { ascending: false }) as { data: Chat[] | null; error: Error | null };
+      .order('updated_at', { ascending: false });
 
     if (chatsError) {
       console.error('Error fetching chats:', chatsError);
@@ -51,20 +51,20 @@ export async function GET(): Promise<NextResponse<ChatHistoryResponse>> {
     }
 
     // Fetch messages for all chats
-    const chatIds = chats.map(chat => chat.id);
+    const chatIds = chats.map((chat: Chat) => chat.id);
     
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: messages, error: messagesError } = await (supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .from('messages') as any)
       .select('*')
       .in('chat_id', chatIds)
-      .order('created_at', { ascending: true }) as { data: Message[] | null; error: Error | null };
+      .order('created_at', { ascending: true });
 
     if (messagesError) {
       console.error('Error fetching messages:', messagesError);
       // Return chats without messages rather than failing completely
       return NextResponse.json({
-        chats: chats.map(chat => ({ ...chat, messages: [] })),
+        chats: chats.map((chat: Chat) => ({ ...chat, messages: [] })),
       });
     }
 
@@ -79,7 +79,7 @@ export async function GET(): Promise<NextResponse<ChatHistoryResponse>> {
     }
 
     // Combine chats with their messages
-    const chatsWithMessages: ChatWithMessages[] = chats.map(chat => ({
+    const chatsWithMessages: ChatWithMessages[] = chats.map((chat: Chat) => ({
       ...chat,
       messages: messagesByChat.get(chat.id) || [],
     }));

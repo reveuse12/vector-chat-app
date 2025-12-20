@@ -1,5 +1,4 @@
 import { SignupForm } from '@/components/auth/SignupForm';
-import Link from 'next/link';
 
 export default function SignupPage() {
   return (

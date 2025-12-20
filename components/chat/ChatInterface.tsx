@@ -12,7 +12,6 @@ import { useEffect, useRef, useMemo, useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import { MessageList } from './MessageList';
 import { ChatInput } from './ChatInput';
-import type { Message } from '@/lib/types/database';
 
 // Retry configuration for rate limiting
 const MAX_RETRIES = 3;
@@ -20,18 +19,16 @@ const INITIAL_RETRY_DELAY = 1000; // 1 second
 
 interface ChatInterfaceProps {
   chatId: string | null;
-  initialMessages?: Message[];
   onChatIdUpdate?: (chatId: string) => void;
 }
 
 export function ChatInterface({
   chatId,
-  initialMessages = [],
   onChatIdUpdate,
 }: ChatInterfaceProps) {
   const chatIdRef = useRef(chatId);
   const onChatIdUpdateRef = useRef(onChatIdUpdate);
-  const [retryCount, setRetryCount] = useState(0);
+  const [, setRetryCount] = useState(0);
 
   // Keep refs updated
   useEffect(() => {

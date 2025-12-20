@@ -8,7 +8,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { MessageSquare, FileText, User, LogOut, Settings } from 'lucide-react';
+import { MessageSquare, FileText, LogOut, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
